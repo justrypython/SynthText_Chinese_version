@@ -1,4 +1,3 @@
-more_font/方正细黑一简体.ttf
-more_font/HYPPTiJ.ttf
-more_font/楷体_GB2312.ttf
-more_font/HYWaiWaiTiJ.ttf
+idcardfonts/fangzhengheiti.TTF
+idcardfonts/simsun.ttf
+idcardfonts/方正黑体简体.TTF

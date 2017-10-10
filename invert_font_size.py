@@ -34,7 +34,7 @@ for i in xrange(len(FS.fonts)):
 	xs.append(h)
 	print font.name
 
-with open('font_px2pt.cp','w') as f:
+with open('data/models/font_px2pt.cp','w') as f:
 	cp.dump(models,f)
 #plt.plot(xs,ys[i])
 #plt.show()

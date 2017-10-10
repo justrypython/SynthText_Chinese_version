@@ -1,5 +1,5 @@
 (dp1
-S'HYPPTiJ'
+S'SimSun'
 p2
 cnumpy.core.multiarray
 _reconstruct
@@ -25,8 +25,8 @@ NNNI-1
 I-1
 I0
 tbI00
-S'\x8b\xae-\xb29\xf4\xf1?3\xef\x87v\xac\x82\xff?'
-tbsS'HYWaiWaiTiJ'
+S'`\x0be\xd6\x98\xf8\xef?\xbd\xf3\x12\xa9\x1a\xff\xf1?'
+tbsS'FZHei-B01S'
 p8
 g3
 (g4
@@ -37,8 +37,8 @@ tRp9
 (I2
 tg7
 I00
-S'\x92\xa6\xb1\xed\xb35\xf2?\x9d}\x02\xbc\x16\x9f\xff?'
-tbsS'KaiTi_GB2312'
+S'9\xcf\x8f\xe4\x90\x00\xf2?\xdb\x1bb\xda\x81\xb5\xef?'
+tbsS'OCR-B 10 BT'
 p10
 g3
 (g4
@@ -49,17 +49,5 @@ tRp11
 (I2
 tg7
 I00
-S'b\x01\xc7\xf0o\xf7\xef?\xc3\xcd\x1aitP\xf2?'
-tbsS'FZXiHei I-Z08S'
-p12
-g3
-(g4
-(I0
-tS'b'
-tRp13
-(I1
-(I2
-tg7
-I00
-S'8kO\xac\xec \xf2?\xbeM\xc8\xab\xa0`\xef?'
+S'\x7f\x10G\xf97|\xf0?\xf0\xd4\xc4\xb7^\xc7\xff?'
 tbs.
