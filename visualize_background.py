@@ -12,7 +12,28 @@ import numpy as np
 import matplotlib.pyplot as plt 
 import h5py 
 from common import *
+from time import sleep
 
+
+def viz_imgs(imgs, alpha=1.0):
+    """
+    text_im : image containing text
+    charBB_list : list of 2x4xn_i bounding-box matrices
+    wordBB : 2x4xm matrix of word coordinates
+    """
+    plt.close(1)
+    fig, ax = plt.subplots(2, 2, sharex=True, sharey=True)
+    
+    plt.subplot(2, 2, 1)
+    plt.imshow(imgs[0])
+    plt.subplot(2, 2, 2)
+    plt.imshow(imgs[1])
+    plt.subplot(2, 2, 3)
+    plt.imshow(imgs[2])
+    plt.subplot(2, 2, 4)
+    plt.imshow(imgs[3])
+    plt.hold(True)
+    plt.show(block=False)
 
 
 def viz_textbb(text_im, charBB_list, wordBB, alpha=1.0):
@@ -52,25 +73,26 @@ def viz_textbb(text_im, charBB_list, wordBB, alpha=1.0):
 
 def main(db_fname):
     db = h5py.File(db_fname, 'r')
-    dsets = sorted(db['data'].keys())
+    dsets = sorted(db['image'].keys())
     print "total number of images : ", colorize(Color.RED, len(dsets), highlight=True)
     for k in dsets:
-        rgb = db['data'][k][...]
-        charBB = db['data'][k].attrs['charBB']
-        wordBB = db['data'][k].attrs['wordBB']
-        txt = db['data'][k].attrs['txt']
+        rgb    = db['image'][k][...]
+        depth  = db['depth'][k][...]
+        depth0 = depth[0].transpose((1, 0))
+        depth1 = depth[1].transpose((1, 0))
+        seg    = db['seg'][k][...]
 
-        viz_textbb(rgb, [charBB], wordBB)
+        #viz_textbb(rgb, [], np.array([]))
+        viz_imgs([depth0, depth1, seg, rgb])
         print "image name        : ", colorize(Color.RED, k, bold=True)
-        print "  ** no. of chars : ", colorize(Color.YELLOW, charBB.shape[-1])
-        print "  ** no. of words : ", colorize(Color.YELLOW, wordBB.shape[-1])
-        print "  ** text         : ", colorize(Color.GREEN, txt)
-
+        
+        #sleep(0.1)
         if 'q' in raw_input("next? ('q' to exit) : "):
             break
     db.close()
 
 if __name__=='__main__':
-    main('results/SynthText_cartoon_viz.h5')
+    #main('results/SynthText_cartoon_viz.h5')
     #main('/media/zhaoke/806602c3-72ac-4719-b178-abc72b3fa783/zhaoke/bgimgs/dset_8000.h5')
+    main('/home/zhaoke/justrypython/SynthText_Chinese_version/data/dset.h5')
 

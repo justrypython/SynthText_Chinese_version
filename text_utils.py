@@ -372,7 +372,7 @@ class RenderFont(object):
             text = self.text_source.sample(nline,nchar,text_type)
             #text = self.text_source.sample(nline,nchar,'PARA')
             #text = self.text_source.sample(nline,nchar,'WORD')
-            print 'before the if judge',text
+            #print 'before the if judge',text
             if len(text)==0:
                 print colorize(Color.GREEN, ' didn\'t pass because of len(text)==0')
                 continue
@@ -644,7 +644,7 @@ class TextSource(object):
             return lines
 
     def sample(self, nline_max,nchar_max,kind='WORD'):
-        print 'sample_output',self.fdict[kind](nline_max,nchar_max)
+        #print 'sample_output',self.fdict[kind](nline_max,nchar_max)
         return self.fdict[kind](nline_max,nchar_max)
         
     def sample_word(self,nline_max,nchar_max,niter=100):
@@ -694,7 +694,7 @@ class TextSource(object):
         nword = [max(1,int(np.ceil(n))) for n in nword]
 
         lines = self.get_lines(nline, nword, nchar_max, f=0.35)
-        print 'sample_para_output',lines
+        #print 'sample_para_output',lines
         if lines is not None:
             # center align the paragraph-text:
             if np.random.rand() < self.center_para:
