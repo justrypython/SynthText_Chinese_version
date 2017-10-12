@@ -321,7 +321,7 @@ def viz_masks(fignum,rgb,seg,depth,label):
     for i in xrange(len(ims)):
         plt.subplot(2,2,i+1)
         plt.imshow(ims[i])
-        print 'shape shows',ims[i].shape
+        #print 'shape shows',ims[i].shape
     plt.show(block=False)
 
 def viz_regions(img,xyz,seg,planes,labels):
@@ -517,7 +517,7 @@ class RendererV3(object):
         bb = self.homographyBB(bb,Hinv)
 
         if not self.bb_filter(bb_orig,bb,text):
-            colorize(Color.RED, 'bad charBB statistics')
+            #colorize(Color.RED, 'bad charBB statistics')
             #warn("bad charBB statistics")
             return #None
 
@@ -528,7 +528,7 @@ class RendererV3(object):
         text_mask = self.feather(text_mask, min_h)
 
         im_final = self.colorizer.color(rgb,[text_mask],np.array([min_h]))
-        print colorize(Color.GREEN, 'text in synthgen.py/place_text to return '+text)
+        #print colorize(Color.GREEN, 'text in synthgen.py/place_text to return '+text)
         return im_final, text, bb, collision_mask
 
 
@@ -679,7 +679,7 @@ class RendererV3(object):
                     # store the result:
                     itext.append(text)
                     ibb.append(bb)
-                    print colorize(Color.GREEN, 'text in synthgen.py/render_text append into itext '+text)
+                    #print colorize(Color.GREEN, 'text in synthgen.py/render_text append into itext '+text)
 
             if  placed:
                 # at least 1 word was placed in this instance:
@@ -687,7 +687,7 @@ class RendererV3(object):
                 idict['txt'] = itext
                 idict['charBB'] = np.concatenate(ibb, axis=2)
                 idict['wordBB'] = self.char2wordBB(idict['charBB'].copy(), ' '.join(itext))
-                print colorize(Color.GREEN, itext)
+                #print colorize(Color.GREEN, itext)
                 res.append(idict.copy())
                 if viz:
                     viz_textbb(1,img, [idict['wordBB']], alpha=1.0)

@@ -30,8 +30,8 @@ SECS_PER_IMG = 5 #max time per image in seconds
 
 # path to the data-file, containing image, depth and segmentation:
 DATA_PATH = 'data'
-DB_FNAME = osp.join(DATA_PATH,'dset.h5')
-#DB_FNAME = '/media/zhaoke/806602c3-72ac-4719-b178-abc72b3fa783/zhaoke/bgimgs/dset_8000.h5'
+#DB_FNAME = osp.join(DATA_PATH,'dset.h5')
+DB_FNAME = '/media/zhaoke/806602c3-72ac-4719-b178-abc72b3fa783/zhaoke/bgimgs/dset_8000.h5'
 # url of the data (google-drive public file):
 DATA_URL = 'http://www.robots.ox.ac.uk/~ankush/data.tar.gz'
 OUT_FILE = 'results/SynthText_cartoon_viz.h5'
@@ -62,14 +62,18 @@ def get_data():
     return h5py.File(DB_FNAME,'r')
 
 
-def add_res_to_db(imgname,res,db):
+def add_res_to_db(imgname,res,db=None):
     """
     Add the synthetically generated text image instance
     and other metadata to the dataset.
     """
     ninstance = len(res)
     for i in xrange(ninstance):
-        print colorize(Color.GREEN,'added into the db %s '%res[i]['txt'])
+        # open the output h5 file:
+        db = h5py.File(OUT_FILE,'a')
+        if 'data' not in db.keys():
+            db.create_group('/data')
+        #print colorize(Color.GREEN,'added into the db %s '%res[i]['txt'])
         
         dname = "%s_%d"%(imgname, i)
         name_cnt = i
@@ -79,14 +83,17 @@ def add_res_to_db(imgname,res,db):
         db['data'].create_dataset(dname,data=res[i]['img'])
         db['data'][dname].attrs['charBB'] = res[i]['charBB']
         db['data'][dname].attrs['wordBB'] = res[i]['wordBB']
-        print 'type of res[i][\'txt\'] ',type(res[i]['txt'])
+        #print 'type of res[i][\'txt\'] ',type(res[i]['txt'])
              
         #db['data'][dname].attrs['txt'] = res[i]['txt']
         db['data'][dname].attrs.create('txt', res[i]['txt'], dtype=h5py.special_dtype(vlen=unicode))
-        print 'type of db ',type(db['data'][dname].attrs['txt']) 
+        db.close()
+        #print 'type of db ',type(db['data'][dname].attrs['txt']) 
         print colorize(Color.GREEN,'successfully added')
-        print res[i]['txt']
-        print res[i]['img'].shape
+        for content in res[i]['txt']:
+            print content
+        #print res[i]['txt']
+        #print res[i]['img'].shape
         print 'charBB',res[i]['charBB'].shape
         print 'charBB',res[i]['charBB']
         print 'wordBB',res[i]['wordBB'].shape
@@ -119,14 +126,12 @@ def main(viz=False):
     db = get_data()
     print colorize(Color.BLUE,'\t-> done',bold=True)
   
-    # open the output h5 file:
-    out_db = h5py.File(OUT_FILE,'a')
-    if 'data' not in out_db.keys():
-        out_db.create_group('/data')
     print colorize(Color.GREEN,'Storing the output in: '+OUT_FILE, bold=True)
   
     # get the names of the image files in the dataset:
-    imnames = sorted(db['image'].keys())
+    imnames = np.array(sorted(db['image'].keys()))
+    shapes = np.array([db['image'][i].shape[:2] for i in imnames])
+    imnames = imnames[np.where(shapes[:, 1] > shapes[:, 0] * 1.5)[0]]
     N = len(imnames)
     global NUM_IMG
     if NUM_IMG < 0:
@@ -147,31 +152,31 @@ def main(viz=False):
             #  useful to use the other one):
             img_resize=img.resize(db['depth'][imname][0, :, :].shape)
             depth = db['depth'][imname][:].T
-            print 'depth shape,img shape',depth.shape,np.array(img).shape
-            print 'depth info',depth
-            print 'depth max min',np.max(depth),np.min(depth)
+            #print 'depth shape,img shape',depth.shape,np.array(img).shape
+            #print 'depth info',depth
+            #print 'depth max min',np.max(depth),np.min(depth)
             #depth = depth[:,:,1]
             #modify the depth with HSV H_channel
             
             #img_resize=img.resize(depth.shape)
             hsv_img=np.array(rgb2hsv(img_resize))
-            print 'hsv_img_shape',hsv_img.shape
+            #print 'hsv_img_shape',hsv_img.shape
             #print 'hsv_img',hsv_img
             H=hsv_img[:,:,2]
             H=H.T
             H=H.astype('float32')
-            print 'H_channel',H.shape,H 
-            print 'H_max min',np.max(H),np.min(H)
-            print 'scale',np.max(depth)/np.max(H)
+            #print 'H_channel',H.shape,H 
+            #print 'H_max min',np.max(H),np.min(H)
+            #print 'scale',np.max(depth)/np.max(H)
             #depth= (np.max(depth)/np.max(H))*H
             #depth= H
             #print np.isnan(H).any()
             #print np.isinf(H).any()
             #print np.isnan(depth).any()
             #print np.isinf(depth).any()
-            print 'depth shape',depth.shape
+            #print 'depth shape',depth.shape
             #print 'depth info',depth
-            print 'depth max min',np.max(depth),np.min(depth)
+            #print 'depth max min',np.max(depth),np.min(depth)
             
             gray=np.array(rgb2gray(img_resize))
             #print 'gray',gray.shape,gray
@@ -187,13 +192,13 @@ def main(viz=False):
             area = db['seg'][imname].attrs['area']
             label = db['seg'][imname].attrs['label']
             
-            print 'seg info',seg.shape,area.shape,label.shape
+            #print 'seg info',seg.shape,area.shape,label.shape
             # re-size uniformly:
             sz = depth.shape[:2][::-1]
             img = np.array(img.resize(sz,Image.ANTIALIAS))
             seg = np.array(Image.fromarray(seg).resize(sz,Image.NEAREST))
       
-            print colorize(Color.RED,'%d of %d'%(i,end_idx-1), bold=True)
+            #print colorize(Color.RED,'%d of %d'%(i,end_idx-1), bold=True)
             res = RV3.render_text(img,depth,seg,area,label,
                                   ninstance=INSTANCE_PER_IMAGE,viz=viz)
             t2=time.time()
@@ -203,7 +208,7 @@ def main(viz=False):
             
                 if len(res) > 0:  
                     # non-empty : successful in placing text:
-                    add_res_to_db(imname,res,out_db)
+                    add_res_to_db(imname,res)
                     break
                 else:
                     res = RV3.render_text(img,depth,seg,area,label,
@@ -218,7 +223,6 @@ def main(viz=False):
             print colorize(Color.GREEN,'>>>> CONTINUING....', bold=True)
             continue
     db.close()
-    out_db.close()
 
 
 if __name__=='__main__':

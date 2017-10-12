@@ -374,12 +374,12 @@ class RenderFont(object):
             #text = self.text_source.sample(nline,nchar,'WORD')
             #print 'before the if judge',text
             if len(text)==0:
-                print colorize(Color.GREEN, ' didn\'t pass because of len(text)==0')
+                #print colorize(Color.GREEN, ' didn\'t pass because of len(text)==0')
                 continue
             if np.any([len(line)==0 for line in text]):
-                print colorize(Color.GREEN, ' didn\'t pass because of np.any')
+                #print colorize(Color.GREEN, ' didn\'t pass because of np.any')
                 continue
-            print colorize(Color.GREEN, 'pass the text filter')
+            #print colorize(Color.GREEN, 'pass the text filter')
             #print colorize(Color.GREEN, text)
 
             # render the text:
@@ -389,9 +389,9 @@ class RenderFont(object):
             # make sure that the text-array is not bigger than mask array:
             if np.any(np.r_[txt_arr.shape[:2]] > np.r_[mask.shape[:2]]):
                 #warn("text-array is bigger than mask")
-                print colorize(Color.GREEN, 'fail in mask array size')
+                #print colorize(Color.GREEN, 'fail in mask array size')
                 continue
-            print colorize(Color.GREEN, 'pass in mask array size')
+            #print colorize(Color.GREEN, 'pass in mask array size')
             # position the text within the mask:
             text_mask,loc,bb, _ = self.place_text([txt_arr], mask, [bb])
             if len(loc) > 0:#successful in placing the text collision-free:
