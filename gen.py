@@ -34,7 +34,7 @@ DATA_PATH = 'data'
 DB_FNAME = '/media/zhaoke/806602c3-72ac-4719-b178-abc72b3fa783/zhaoke/bgimgs/dset_8000.h5'
 # url of the data (google-drive public file):
 DATA_URL = 'http://www.robots.ox.ac.uk/~ankush/data.tar.gz'
-OUT_FILE = 'results/SynthText_cartoon_viz.h5'
+OUT_FILE = 'results/SynthText_v1.h5'
 
 def get_data():
     """
